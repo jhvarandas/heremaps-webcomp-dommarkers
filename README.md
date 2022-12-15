@@ -8,7 +8,7 @@ Sample mock app to showcase an issue with heremaps and DOM Markers
 - on file `VectorMap.mjs` inside the `addMarkers()` function on line `164` under theme you can toggle whether you want the map to break or not by changing the boolean value on the function call `this.getCustomTheme(true||false)`
 
 ## Hypothesis
-Depending on the integration pattern, the Dealer Locator app, can have or not *one* or *more* shadow DOM wrappers around it.
+Depending on the integration pattern, our app, may or may not have *one* or *more* shadow DOM wrappers around it.
 
 When that happens, adding a DomMarker will make the app break because it can't find the "way" to the shadow dom where the map is.
 
