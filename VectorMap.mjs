@@ -63,6 +63,7 @@ class VectorMap extends HTMLElement {
       window.addEventListener("resize", () => map.getViewPort().resize());
     }
 
+    // GET DOM ICON
     getDomIcon() {
       // not the real icon but doesnt matter
       const iconEl = document.createElement('div'),
@@ -80,12 +81,14 @@ class VectorMap extends HTMLElement {
       return domIcon;
     }
 
+    // GET DOM MARKER
     getDomMarker(cluster, cfg = {}) {
       const domMarker = new H.map.DomMarker(cluster.getPosition(), cfg);
       return domMarker;
     }
 
-    getStandarMarker() {
+    // STANDARD ICON BEHAVIOUR
+    getStandardMarker(cluster) {
       // STANDARD MARKER
       const clusterMarker = new H.map.Marker(cluster.getPosition(), {
         icon: new H.map.Icon(getIconMarkup('cluster'), {
@@ -98,18 +101,26 @@ class VectorMap extends HTMLElement {
         min: cluster.getMinZoom(),
         max: cluster.getMaxZoom()
       });
+
+      return clusterMarker;
     }
 
-    getCustomTheme(mapElement) {
+    getCustomTheme(useDOMandFail = false) {
       const CUSTOM_THEME = {
         getClusterPresentation: (cluster) => {
-          // TODO: WORKS!
-          //const clusterMarker = this.getStandardMarker();
+          let clusterMarker;
 
-          // FIXME: DOES NOT WORK!
-          const domIcon = this.getDomIcon();
-          // const clusterMarker = this.getDomMarker(cluster); // uses default here marker
-          const clusterMarker = this.getDomMarker(cluster, {icon:domIcon}); // uses custom marker
+          if(useDOMandFail) {
+            // FIXME: DOES NOT WORK!
+            const domIcon = this.getDomIcon();
+            clusterMarker = this.getDomMarker(cluster, {icon:domIcon}); // uses custom marker
+            // it fails both with or without custom dom icon
+            // clusterMarker = this.getDomMarker(cluster); // uses default here marker
+          }
+          else {
+            // TODO: WORKS!
+            clusterMarker = this.getStandardMarker(cluster);
+          }
           return clusterMarker;
         },
         getNoisePresentation: (noisePoint) => {
@@ -150,7 +161,7 @@ class VectorMap extends HTMLElement {
           // minimum weight of points required to form a cluster
           minWeight: 3
         },
-        theme: this.getCustomTheme(this.mapEl),
+        theme: this.getCustomTheme(true),
       });
 
       // Create a layer tha will consume objects from our clustering provider
@@ -181,9 +192,6 @@ class VectorMap extends HTMLElement {
       // Move map's center to a clicked marker
       this.map.setCenter(position, true);
     }
-
-
-
 }
 
 export default VectorMap;
