@@ -12,8 +12,9 @@ Depending on the integration pattern, our app, may or may not have *one* or *mor
 
 When that happens, adding a DomMarker will make the app break because it can't find the "way" to the shadow dom where the map is.
 
-It works with the standard Here Marker because it all happens inside the canvas element.
+It works with the standard Here Marker because it all happens inside the `canvas` element.
 
+## Requirements
 We require DOM Markers to enrich user experience.
 
 ## Weird stuff / X-Files material
